@@ -23,12 +23,7 @@
                         </div>
                         <div class="d-flex flex-wrap justify-content-around">
                             <!-- Productos -->
-                            <div class="text-center">
-                                <span class="material-icons" style="font-size: 48px;">inventory</span>
-                                <h4>{{$productos}}</h4>
-                                <p>Productos</p>
-                            </div>
-
+                        
                             <!-- Solicitudes -->
                             <div class="text-center">
                                 <span class="material-icons" style="font-size: 48px;">assignment</span>
