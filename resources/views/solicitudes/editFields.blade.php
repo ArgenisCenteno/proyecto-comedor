@@ -183,8 +183,7 @@
                     <td>${nombre}</td>
                     <td>${descripcion}</td>
                     <td><input type="number" value="1" min="1" class="form-control cantidadProducto"></td>
-                    <td><input type="text" value="" class="form-control precioProducto" placeholder="Precio"></td>
-                    <td><button class="btn btn-danger btn-sm eliminarProducto">Eliminar</button></td>
+                     <td><button class="btn btn-danger btn-sm eliminarProducto">Eliminar</button></td>
                 </tr>`
             );
            
@@ -208,8 +207,7 @@
             const nombre = $(this).find('td').eq(0).text();
             const descripcion = $(this).find('td').eq(1).text();
             const cantidad = $(this).find('.cantidadProducto').val();
-            const precio = $(this).find('.precioProducto').val();
-
+ 
             $('<input>').attr({
                 type: 'hidden',
                 name: 'productos[]',
@@ -217,8 +215,7 @@
                     nombre: nombre,
                     descripcion: descripcion,
                     cantidad: cantidad,
-                    precio: precio,
-                })
+                 })
             }).appendTo(this);
         });
 

@@ -17,7 +17,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <!-- Unified Small Box Card -->
-                    <div class="small-box text-white" style="background-color: teal;">
+                    <div class="small-box text-black" style="background-color:rgb(216, 216, 213)" >
                         <div class="inner">
                             <h3>PDVSA SGI</h3>
                         </div>
@@ -56,10 +56,10 @@
                 </div>
                 <div class="col-lg-12">
                     <div class="card">
-                        <div class="card-header bg-dark text-white">
+                        <div class="card-header bg-dark text-white p-3">
                             <h4 class="card-title">Estado de Movimientos</h4>
                         </div>
-                        <div class="card-body" style="background-color: teal; ">
+                        <div class="card-body bg-secondary"   >
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="info-box">

@@ -18,6 +18,7 @@ class Producto extends Model
         'cantidad',
         'categoria_id',
         'disponible',
+        'disponibilidad'
     ];
     public function subCategoria()
     {

@@ -90,7 +90,8 @@ class ProductoController extends Controller
             'cantidad' => $request->cantidad,
             'categoria_id' => $request->sub_categoria_id,
             'disponible' => $request->disponible,
-            'unidad_medida' => $request->unidad_medida
+            'unidad_medida' => $request->unidad_medida,
+            'disponibilidad' => $request->disponibilidad,
         ]);
 
 
@@ -126,14 +127,9 @@ class ProductoController extends Controller
      */
     public function update(Request $request, $id)
     {
+        
         // Validar los datos del formulario
-        $request->validate([
-            'nombre' => 'required|string|max:255',
-            'descripcion' => 'required|string',
-            'cantidad' => 'required|integer|min:0',
-            'sub_categoria_id' => 'required|exists:sub_categorias,id',
-            'disponible' => 'required|boolean',
-        ]);
+       
 
         // Buscar el producto por su ID
         $producto = Producto::findOrFail($id);
@@ -145,7 +141,7 @@ class ProductoController extends Controller
         $producto->cantidad = $request->cantidad;
         $producto->categoria_id = $request->sub_categoria_id;
         $producto->disponible = $request->disponible;
-
+        $producto->disponibilidad = $request->disponibilidad;
         // Guardar el producto actualizado
         $producto->save();
 

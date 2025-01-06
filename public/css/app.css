@@ -1667,7 +1667,7 @@ span.select2-selection.select2-selection--single {
 
 
 th{
-    background-color: teal !important;
+    background-color: #13171f !important;
     color: white !important;
 }
 
@@ -1709,8 +1709,5 @@ th{
     border-radius: 18px!important;
 }
 
-.btn-primary{
-    background-color: teal !important;
-    border: teal;
-}
+ 
 

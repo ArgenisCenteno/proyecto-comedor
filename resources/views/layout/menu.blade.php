@@ -1,4 +1,4 @@
-<aside class="app-sidebar shadow" data-bs-theme="dark" style="color: white !important; border: none !important; background-color: teal !important;">
+<aside class="app-sidebar shadow" data-bs-theme="dark" style="color: white !important; border: none !important; background-color: #991b1b !important;">
     <div class="sidebar-brand" style="border: none!important">
         <a href="{{ route('home') }}" class="brand-link">
             <span style="text-decoration: none; color: white !important;"> PDVSA</span>

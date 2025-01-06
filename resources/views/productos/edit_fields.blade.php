@@ -13,8 +13,12 @@
 
     <!-- Cantidad Field -->
     <div class="form-group col-sm-12 col-md-4">
-        <label for="cantidad"><strong>Cantidad:</strong></label>
+        <label for="cantidad"><strong>Disponibilidad:</strong></label>
         {!! Form::number('cantidad', $producto->cantidad, ['class' => 'form-control round', 'step' => '1', 'required']) !!}
+    </div>
+    <div class="form-group col-sm-12 col-md-4">
+        <label for="disponibilidad"><strong>Cantidad:</strong></label>
+        {!! Form::number('disponibilidad', $producto->disponibilidad, ['class' => 'form-control round', 'step' => '1', 'required']) !!}
     </div>
 </div>
 
