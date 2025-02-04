@@ -45,6 +45,8 @@
             'metro' => 'Metro',
             'centimetro' => 'Centímetro',
             'unidad' => 'Unidad',
+            'bulto' => 'Bulto',
+            'caja' => 'caja',
         ], null, ['class' => 'form-control round', 'placeholder' => 'Selecciona una unidad de medida', 'required']) !!}
     </div>
 </div>

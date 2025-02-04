@@ -35,4 +35,9 @@ class Solicitud extends Model
     {
         return $this->belongsTo(Proveedor::class, 'proveedor_id');
     }
+
+    public function productos()
+    {
+        return $this->hasMany(ProductoOrdenado::class);
+    }
 }

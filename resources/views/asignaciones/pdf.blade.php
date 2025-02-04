@@ -118,12 +118,12 @@
 
                 <tr>
                     <td style="padding: 8px; border-bottom: 1px solid #ddd;">
-                         
-                            {{ $asignacion->proveedor->razon_social }}<br>
-                       
+                        @foreach($asignacion->beneficiarios as $beneficiario)
+                            {{ $beneficiario->razon_social }}<br>
+                        @endforeach
                     </td>
 
-                    <td style="padding: 8px; border-bottom: 1px solid #ddd;"> {{$asignacion->user->name}} </td>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd;"> {{$asignacion->creador->name}} </td>
 
 
 

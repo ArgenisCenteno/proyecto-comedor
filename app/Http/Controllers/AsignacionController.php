@@ -11,6 +11,7 @@ use App\Models\ProductoAsignado;
 use App\Models\Proveedor;
 use App\Models\Requerimiento;
 use App\Models\Tramites;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
@@ -29,6 +30,7 @@ class AsignacionController extends Controller
             return DataTables::of($solicitudes)
                 ->addColumn('actions', function ($row) {
                     return '<a href="' . route('asignaciones.edit', [$row->id]) . '"  ><span class="material-icons">edit</span></a>
+                    <a href="' . route('asignacion.pdf', [$row->id]) . '"  target="_blank"><span class="material-icons">print</span></a>
                         <form action="' . route('asignaciones.destroy', [$row->id]) . '" method="POST" style="display:inline;">
                         ' . csrf_field() . method_field('DELETE') . '
                         <button type="submit" class="border-0 bg-transparent p-0"><span class="material-icons text-danger">delete</span></button>
@@ -361,4 +363,25 @@ class AsignacionController extends Controller
     {
         //
     }
+
+    public function pdf(string $id) {
+        $asignacion = Asignacion::where('id', $id)->first();
+
+        
+
+        if (!$asignacion) {
+            Alert::error('¡Error!', 'Asignación no encontrada.')->showConfirmButton('Aceptar', 'rgba(79, 59, 228, 1)');
+            return redirect(route('asignaciones.index'));
+        }
+
+        // Ocultar 'password' y 'remember_token' y convertir a array
+     
+        $qrCode = QrCode::size(120)->generate('http://127.0.0.1:8000/pdfAsignacion/' . $id);
+
+       // dd($vendedorArray);
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadView('asignaciones.pdf', compact('qrCode','asignacion'));
+        return $pdf->stream('asignacion.pdf');
+    }
 }
+  

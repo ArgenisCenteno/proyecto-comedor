@@ -4,10 +4,11 @@
             <tr>
                 <th>#</th>
                 <th>Nombre</th>
-                <th>Disponible</th>
                 <th>Categoría</th>
-                <th>Disponibilidad</th>
+                <th>Disponible</th>
                 <th>Unidad de Medida</th>
+                <th>Disponibilidad</th>
+               
                 <th>Opciones</th>
             </tr>
         </thead>
@@ -34,11 +35,11 @@
             columns: [
                 { data: 'id', name: 'id' },
                 { data: 'nombre', name: 'nombre' },
-               
-                { data: 'cantidad', name: 'cantidad' },
                 { data: 'subCategoria', name: 'subCategoria' }, 
-                { data: 'disponible', name: 'disponible' },
+                { data: 'cantidad', name: 'cantidad' },
                 { data: 'unidad_medida', name: 'unidad_medida' },
+                { data: 'disponible', name: 'disponible' },
+               
                 { data: 'actions', name: 'actions', searchable: true, orderable: true }
             ],
             order: [[0, 'desc']],

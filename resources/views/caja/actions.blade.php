@@ -3,6 +3,8 @@
     <div class='btn-group'>
         <a href="{{ route('cajas.edit', [$id]) }}" class='btn btn-info' data-bs-toggle="tooltip"
             data-bs-placement="top" title="Editar"><span class="material-icons">edit</span></a>
+            <a href="{{ route('asignacion.pdf', [$id]) }}" class='btn btn-warning' data-bs-toggle="tooltip"
+            data-bs-placement="top" title="Editar"><span class="material-icons">print</span></a>
             <a href="{{ route('cajas.aperturar', [$id]) }}" class='btn btn-success' data-bs-toggle="tooltip"
             data-bs-placement="top" title="Editar"><span class="material-icons">open_in_new</span></a>    
         

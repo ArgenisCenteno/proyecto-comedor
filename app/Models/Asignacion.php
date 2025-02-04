@@ -39,4 +39,9 @@ class Asignacion extends Model
     {
         return $this->hasMany(BeneficiarioAsignacion::class);
     }
+
+    public function productos()
+    {
+        return $this->hasMany(ProductoAsignado::class);
+    }
 }

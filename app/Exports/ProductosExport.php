@@ -31,7 +31,7 @@ class ProductosExport implements FromCollection, WithHeadings, ShouldAutoSize, W
             'ID',
             'Nombre',
             'Descripción',
-            'Aplica IVA',
+             
             'Cantidad',
             'Categoría',
             'Disponible',
@@ -54,7 +54,7 @@ class ProductosExport implements FromCollection, WithHeadings, ShouldAutoSize, W
             $producto->id,
             $producto->nombre,
             $producto->descripcion,
-            $producto->aplica_iva ? 'Sí' : 'No', // Boolean as 'Sí' or 'No'
+           
             $producto->cantidad,
             $producto->subcategoria->nombre ?? 'N/A', // Assumes relation with Categoria model
             $producto->disponible ? 'Disponible' : 'No Disponible', // Boolean for availability

@@ -85,6 +85,8 @@ Route::get('/exportar-productos', function () {
 });
 Route::post('/productos/import', [ProductoController::class, 'import'])->name('productos.import');
 
+Route::get('/pdfAsignacion/{id}', [AsignacionController::class, 'pdf'])->name('asignacion.pdf');
+Route::get('/pdfSolicitud/{id}', [SolicitudController::class, 'pdf'])->name('solicitud.pdf');
 
 /* TASAS, MONEDAS E IMPUESTOS */
 Route::resource('tasas', App\Http\Controllers\TasasController::class);

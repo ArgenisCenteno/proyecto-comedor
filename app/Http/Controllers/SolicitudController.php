@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
 use Alert;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 class SolicitudController extends Controller
 {
     /**
@@ -24,10 +25,11 @@ class SolicitudController extends Controller
         if ($request->ajax()) {
             $solicitudes = Solicitud::with('user', 'proveedor')->get();
 
-            return DataTables::of($solicitudes)
+            return DataTables::of($solicitudes)  
                 ->addColumn('actions', function ($row) {
                     return '<a href="' . route('solicitudes.edit', [$row->id]) . '" ><span class="material-icons">edit</span></a>
-                        <form action="' . route('solicitudes.destroy', [$row->id]) . '" method="POST" style="display:inline;">
+                        <a href="' . route('solicitud.pdf', [$row->id]) . '"  target="_blank"><span class="material-icons">print</span></a>
+                    <form action="' . route('solicitudes.destroy', [$row->id]) . '" method="POST" style="display:inline;">
                         ' . csrf_field() . method_field('DELETE') . '
                         <button type="submit" class="border-0 bg-transparent p-0" ><span class="material-icons text-danger">delete</span></button>
                         </form>';
@@ -300,5 +302,25 @@ class SolicitudController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function pdf(string $id) {
+        $asignacion = Solicitud::where('id', $id)->first();
+
+        
+
+        if (!$asignacion) {
+            Alert::error('¡Error!', 'Asignación no encontrada.')->showConfirmButton('Aceptar', 'rgba(79, 59, 228, 1)');
+            return redirect(route('asignaciones.index'));
+        }
+
+        // Ocultar 'password' y 'remember_token' y convertir a array
+     
+        $qrCode = QrCode::size(120)->generate('http://127.0.0.1:8000/pdfSolicitud/' . $id);
+
+       // dd($vendedorArray);
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadView('solicitudes.pdf', compact('qrCode','asignacion'));
+        return $pdf->stream('solicitud.pdf');
     }
 }
