@@ -16,10 +16,10 @@
                             </div>
                          
                             <div class="col-md-6 col-6">
-                                <h3 class="p-2 bold">Proveedores</h3>
+                                <h3 class="p-2 bold">Beneficiarios</h3>
                             </div>
                             <div class="d-flex justify-content-end mt-3">
-                            <a href="{{ route('export.proveedores') }}" class="btn btn-info mr-1">
+                            <a href="{{ route('export.beneficiarios') }}" class="btn btn-info mr-1">
                                     <span class="material-icons" style="vertical-align: middle;">
                                         print
                                     </span>
@@ -28,16 +28,16 @@
                                 <!-- Botón para abrir el modal -->
                                 <button type="button" class="btn btn-success" data-bs-toggle="modal"
                                     data-bs-target="#importModal">
-                                     Cargar Proveedores desde Excel
+                                     Cargar Beneficiarios desde Excel
                                 </button>
 
-                                <a href="{{route('proveedores.create')}}"
+                                <a href="{{route('beneficiarios.create')}}"
                                     class="btn btn-primary  round mx-1">Registrar</a>
                             </div>
                         </div>
                         <div class="card-body">
 
-                            @include('proveedores.table')
+                            @include('beneficiarios.table')
                         </div>
                     </div>
                 </div>

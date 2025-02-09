@@ -58,7 +58,9 @@ class SolicitudController extends Controller
                 ->rawColumns(['status', 'actions'])
                 ->make(true);
         } else {
-            return view('solicitudes.index');
+            $providers = Proveedor::where('tip', '=', 'ENTRADA')->get(); // Assuming you have a Provider model
+
+            return view('solicitudes.index', compact('providers'));
         }
     }
 
@@ -293,8 +295,9 @@ class SolicitudController extends Controller
     
             return redirect()->route('solicitudes.index')->with('success', 'Solicitud actualizada correctamente');
         }
+        $providerId = $request->input('provider_id');
 
-        return Excel::download(new SolicitudesExport($request->start_date, $request->end_date), 'solicitudes.xlsx');
+        return Excel::download(new SolicitudesExport($request->start_date, $request->end_date, $providerId), 'solicitudes.xlsx');
     }
     /**
      * Remove the specified resource from storage.

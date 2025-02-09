@@ -12,9 +12,18 @@ class ProveedoresExport implements FromCollection, WithHeadings, ShouldAutoSize
     /**
      * @return \Illuminate\Support\Collection
      */
+
+     protected $tipo;
+
+     public function __construct($tipo)
+     {
+         $this->tipo = $tipo;
+     }
+  
+
     public function collection()
     {
-        return Proveedor::select('id', 'razon_social', 'telefono', 'email', 'estado', 'municipio', 'parroquia', 'rif')->get();
+        return Proveedor::select('id', 'razon_social', 'telefono', 'email', 'estado', 'municipio', 'parroquia', 'rif')->where('tip', '=', $this->tipo)->get();
     }
 
     /**

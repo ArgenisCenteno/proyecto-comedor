@@ -12,18 +12,21 @@ class SolicitudesExport implements FromView, WithHeadings, ShouldAutoSize
 {
     protected $startDate;
     protected $endDate;
+    protected $providerId;
 
-    public function __construct($startDate, $endDate)
+    public function __construct($startDate, $endDate, $providerId)
     {
         $this->startDate = $startDate;
         $this->endDate = $endDate;
+        $this->providerId = $providerId;
     }
-
+ 
     public function view(): View
     {
         $solicitudes = Solicitud::with(['user', 'proveedor']) // Assuming 'creadoPor' is the relation to User and 'proveedor' is the relation to Proveedor
-            ->whereBetween('fecha', [$this->startDate, $this->endDate])
-            ->get();
+        ->where('proveedor_id', $this->providerId)
+        ->whereBetween('fecha', [$this->startDate, $this->endDate])
+            ->get(); 
 
         return view('exports.solicitudes', [
             'solicitudes' => $solicitudes

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AsignacionController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\BeneficiarioController;
 use App\Http\Controllers\CajaController;
 use App\Http\Controllers\CompraController;
 use App\Http\Controllers\ProductoController;
@@ -62,6 +63,8 @@ Route::resource('proveedores', App\Http\Controllers\ProveedorController::class);
 Route::get('/buscarProveedores', [ProveedorController::class, 'buscarProveedor'])->name('buscarProductos');
 Route::post('/import-proveedores', [ProveedorController::class, 'import'])->name('import.proveedores');
 Route::get('export-proveedores', [ProveedorController::class, 'exportProveedores'])->name('export.proveedores');
+Route::resource('beneficiarios', App\Http\Controllers\BeneficiarioController::class);
+Route::get('export-beneficiarios', [BeneficiarioController::class, 'exportProveedores'])->name('export.beneficiarios');
 
 /* PERSONAL */
 Route::resource('personal', App\Http\Controllers\PersonalController::class);

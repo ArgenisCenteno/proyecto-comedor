@@ -41,13 +41,22 @@
 <div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header" style="background-color: teal; color: white;">
+            <div class="modal-header bg-danger" >
                 <h5 class="modal-title" id="exportModalLabel">Exportar Asignaciones por Rango de Fecha</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form action="{{ route('asignaciones.export') }}" method="POST">
                     @csrf
+                    <div class="mb-3">
+                        <label for="provider_id" class="form-label">Beneficiario</label>
+                        <select name="provider_id" class="form-control " required>
+                            <!-- Assuming you have a list of providers -->
+                            @foreach ($providers as $provider)
+                                <option value="{{ $provider->id }}">{{ $provider->razon_social }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     <div class="mb-3">
                         <label for="start_date" class="form-label">Fecha de Inicio</label>
                         <input type="date" name="start_date" class="form-control" required>
@@ -58,7 +67,7 @@
                     </div>
                     <button type="submit" class="btn btn-primary">Exportar</button>
                 </form>
-            </div>
+            </div>  
         </div>
     </div>
 </div>

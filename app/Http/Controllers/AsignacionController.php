@@ -46,6 +46,7 @@ class AsignacionController extends Controller
                 ->editColumn('creador', function ($row) {
                     return $row->creador->name;
                 })
+                
               
                 ->editColumn('status', function ($row) {
                     // Verifica el estado y devuelve un badge con el color adecuado
@@ -61,7 +62,8 @@ class AsignacionController extends Controller
                 ->rawColumns(['status', 'actions'])
                 ->make(true);
         } else {
-            return view('asignaciones.index');
+            $providers = Proveedor::where('tip', '=', 'SALIDA')->get(); // Assuming you have a Provider model
+            return view('asignaciones.index', compact('providers'));
         }
     }
     
@@ -89,7 +91,7 @@ class AsignacionController extends Controller
         $solicitud = new Asignacion();
         $solicitud->fecha = $now;
         $solicitud->descripcion = $request->descripcion;
-        $solicitud->tipo = $request->tipo;
+        $solicitud->tip = $request->tipo;
         $solicitud->creado_por = auth()->id();
         $solicitud->status = 'Pendiente';
         $solicitud->save();
@@ -296,12 +298,12 @@ class AsignacionController extends Controller
             }
         }
 
-        foreach ($proveedoresExistentes as $proveedorExistente) {
+    /*    foreach ($proveedoresExistentes as $proveedorExistente) {
             if (!in_array($proveedorExistente->proveedor_id, $productosIdsEnFormulario)) {
                 // Eliminar el producto si ya no está en la nueva lista de productos seleccionados
                 $proveedorExistente->delete();
             }
-        }
+        } */
 
         $productosOrdenados = ProductoAsignado::where('asignacion_id', $solicitud->id)->get();
         if ($solicitud->status == 'Pendiente' && $request->status == 'Aprobado') {
@@ -350,11 +352,11 @@ class AsignacionController extends Controller
             Alert::error('Consulta incongruente,', 'Ingrese un rango de fecha correcto')->showConfirmButton('Aceptar', 'rgba(79, 59, 228, 1)');
     
             return redirect()->route('asignaciones.index')->with('success', 'Solicitud actualizada correctamente');
-        }
+        } 
         // Validate the date range
        
-
-        return Excel::download(new AsignacionesExport($request->start_date, $request->end_date), 'asignaciones.xlsx');
+        $providerId = $request->input('provider_id');
+        return Excel::download(new AsignacionesExport($request->start_date, $request->end_date, $providerId), 'asignaciones.xlsx');
     }
     /**
      * Remove the specified resource from storage.

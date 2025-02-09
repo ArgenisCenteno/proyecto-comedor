@@ -6,27 +6,27 @@ use App\Exports\ProveedoresExport;
 use App\Imports\ProveedoresImport;
 use App\Models\Proveedor;
 use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
-use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
+use Validator;
+use Yajra\DataTables\DataTables;
 use Alert;
-
-class ProveedorController extends Controller
+class BeneficiarioController extends Controller
 {
+   
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $proveedores = Proveedor::where('tip', '=', 'ENTRADA')->get(); // Cargar la relación subCategoria
+            $proveedores = Proveedor::where('tip', '=', 'SALIDA')->get(); // Cargar la relación subCategoria
 
             return DataTables::of($proveedores)
                 ->addColumn('actions', 'proveedores.actions')
                 ->rawColumns(['status', 'actions'])
                 ->make(true);
         } else {
-            return view('proveedores.index');
+            return view('beneficiarios.index');
         }
     }
 
@@ -35,7 +35,7 @@ class ProveedorController extends Controller
      */
     public function create()
     {
-        return view('proveedores.create');
+        return view('beneficiarios.create');
     }
 
     /**
@@ -64,9 +64,9 @@ class ProveedorController extends Controller
             ->first();
 
         if ($existingProveedor) {
-            Alert::error('¡Error!', 'Ya existe una proveedor con ese nombre o RIF')->showConfirmButton('Aceptar', 'rgba(79, 59, 228, 1)');
+            Alert::error('¡Error!', 'Ya existe una beneficiario con ese nombre o RIF')->showConfirmButton('Aceptar', 'rgba(79, 59, 228, 1)');
 
-            return redirect()->route('proveedores.index');
+            return redirect()->route('beneficiarios.index');
         }
 
         $numero = $request->prefijo . $request->telefono;
@@ -80,12 +80,13 @@ class ProveedorController extends Controller
         $proveedor->municipio = $request->municipio;
         $proveedor->parroquia = $request->parroquia;
         $proveedor->rif = $request->rif;
+        $proveedor->tip = 'SALIDA';
         $proveedor->save();
 
         // Retornar un mensaje de éxito
         Alert::success('Exito!', 'Registro hecho correctamente')->showConfirmButton('Aceptar', 'rgba(79, 59, 228, 1)');
 
-        return redirect()->route('proveedores.index');
+        return redirect()->route('beneficiarios.index');
     }
 
     /**
@@ -108,7 +109,7 @@ class ProveedorController extends Controller
             return redirect(route('proveedores.index'));
         }
 
-        return view('proveedores.edit')->with('proveedor', $proveedor);
+        return view('beneficiarios.edit')->with('proveedor', $proveedor);
     }
 
     /**
@@ -131,7 +132,7 @@ class ProveedorController extends Controller
         $proveedor = Proveedor::findOrFail($id);
         if (!$proveedor) {
             Alert::error('¡Error!', 'Proveedor no encontrado')->showConfirmButton('Aceptar', 'rgba(79, 59, 228, 1)');
-            return redirect(route('proveedores.index'));
+            return redirect(route('beneficiarios.index'));
         }
         $numero = $request->prefijo . $request->telefono;
         // Asignar los valores directamente
@@ -150,7 +151,7 @@ class ProveedorController extends Controller
         Alert::success('Exito!', 'Registro actualizado correctamente')->showConfirmButton('Aceptar', 'rgba(79, 59, 228, 1)');
 
 
-        return redirect()->route('proveedores.index');
+        return redirect()->route('beneficiarios.index');
 
     }
 
@@ -165,12 +166,12 @@ class ProveedorController extends Controller
 
         if (!$proveedor) {
             Alert::error('¡Error!', 'No existe este proveedor')->showConfirmButton('Aceptar', 'rgba(79, 59, 228, 1)');
-            return redirect(route('proveedores.index'));
+            return redirect(route('beneficiarios.index'));
         }
 
         $proveedor->delete();
         Alert::success('¡Éxito!', 'Proveedor eliminado exitosamente')->showConfirmButton('Aceptar', 'rgba(79, 59, 228, 1)');
-        return redirect()->route('proveedores.index');
+        return redirect()->route('beneficiarios.index');
     }
 
     public function buscarProveedor(Request $request)
@@ -198,7 +199,7 @@ class ProveedorController extends Controller
 
     public function exportProveedores()
     {
-        $tipo = 'ENTRADA';
+        $tipo = 'SALIDA';
         return Excel::download(new ProveedoresExport($tipo), 'proveedores.xlsx');
     }
 }

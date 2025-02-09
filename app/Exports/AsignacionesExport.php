@@ -12,18 +12,24 @@ class AsignacionesExport implements FromView, WithHeadings, ShouldAutoSize
 {
     protected $startDate;
     protected $endDate;
+    protected $providerId;
 
-    public function __construct($startDate, $endDate)
+    public function __construct($startDate, $endDate, $providerId)
     {
         $this->startDate = $startDate;
         $this->endDate = $endDate;
+        $this->providerId = $providerId;
     }
+
 
     public function view(): View
     {
-        $asignaciones = Asignacion::with('creador') // Assuming 'creador' is the relation to User
-            ->whereBetween('fecha', [$this->startDate, $this->endDate])
-            ->get();
+        $asignaciones = Asignacion::with('creador', 'beneficiarios')  // Include 'beneficiarios' relationship
+        ->whereHas('beneficiarios', function($query) {
+            $query->where('proveedor_id', $this->providerId);  // Filter by proveedor_id in BeneficiarioAsignacion
+        })
+        ->whereBetween('fecha', [$this->startDate, $this->endDate])
+        ->get();
 
         return view('exports.asignaciones', [
             'asignaciones' => $asignaciones

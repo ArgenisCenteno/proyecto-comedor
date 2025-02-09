@@ -53,10 +53,15 @@
                 <li class="nav-item">
                     <a href="{{ route('proveedores.index') }}" class="nav-link">
                         <i class="material-icons" style="font-size: 20px; color: white;">people</i>
-                        <p style="color: white; margin-left: 8px;">Proveedores / Beneficiario</p>
+                        <p style="color: white; margin-left: 8px;">Proveedores </p>
                     </a>
                 </li>
-
+                <li class="nav-item">
+                    <a href="{{ route('beneficiarios.index') }}" class="nav-link">
+                        <i class="material-icons" style="font-size: 20px; color: white;">people</i>
+                        <p style="color: white; margin-left: 8px;">Beneficiarios </p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a href="{{ route('usuarios.index') }}" class="nav-link">
                         <i class="material-icons" style="font-size: 20px; color: white;">people_outline</i>
