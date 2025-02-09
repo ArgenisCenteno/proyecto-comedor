@@ -15,4 +15,6 @@
     @stack('page_scripts')
     <link rel="stylesheet" type="text/css" href="{{asset('css/app.css')}}" />
     <link href="{{ asset('css/select2.css') }}" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+
 </head> <!--end::Head--> <!--begin::Body-->
