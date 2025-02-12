@@ -47,7 +47,7 @@
                 <th>Nombre</th>
                 <th>Descripción</th>
                 <th>Cantidad</th>
-                <th>Precio</th>
+                 
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -57,7 +57,7 @@
             <td>{{$producto->producto->nombre}}</td>
              <td>{{$producto->producto->descripcion}}</td>
              <td><input class="form-control cantidadProducto"  type="number" step="any" value="{{$producto->cantidad}}"></td>
-             <td><input class="form-control precioProducto" type="number" step="any" value="{{$producto->precio }}"></td>
+           
              <td><button class="btn btn-danger btn-sm eliminarProducto">Eliminar</button></td>
             </tr>
             @endforeach

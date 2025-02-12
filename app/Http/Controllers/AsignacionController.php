@@ -85,13 +85,13 @@ class AsignacionController extends Controller
     {
       //  dd("test");
     
-       
+         
         // Crear la asignacion
         $now = Carbon::now();
         $solicitud = new Asignacion();
         $solicitud->fecha = $now;
         $solicitud->descripcion = $request->descripcion;
-        $solicitud->tip = $request->tipo;
+        $solicitud->tipo = $request->tipo;
         $solicitud->creado_por = auth()->id();
         $solicitud->status = 'Pendiente';
         $solicitud->save();
