@@ -118,8 +118,8 @@
 
                 <tr>
                     <td style="padding: 8px; border-bottom: 1px solid #ddd;">
-                        @foreach($asignacion->beneficiarios as $beneficiario)
-                            {{ $beneficiario->razon_social }}<br>
+                        @foreach($proveedores as $beneficiario)
+                            {{ $beneficiario->proveedor->razon_social }}<br>
                         @endforeach
                     </td>
 

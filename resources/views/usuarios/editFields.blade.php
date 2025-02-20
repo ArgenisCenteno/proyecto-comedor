@@ -25,16 +25,7 @@
             <span class="text-danger">{{ $message }}</span>
         @enderror
     </div>
-
-    <!-- Cédula -->
-    <div class="form-group col-sm-12 col-md-6">
-        {!! Form::label('cedula', 'Cédula:', ['class' => 'bold']) !!}
-        {!! Form::text('cedula', $usuario->cedula ?? null, ['class' => 'form-control round', 'required']) !!}
-        @error('cedula')
-            <span class="text-danger">{{ $message }}</span>
-        @enderror
-    </div>
-
+ 
     <!-- Estado -->
     <div class="form-group col-sm-12 col-md-6">
         {!! Form::label('status', 'Estado:', ['class' => 'bold']) !!}

@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Solicitud;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -23,10 +24,13 @@ class SolicitudesExport implements FromView, WithHeadings, ShouldAutoSize
  
     public function view(): View
     {
-        $solicitudes = Solicitud::with(['user', 'proveedor']) // Assuming 'creadoPor' is the relation to User and 'proveedor' is the relation to Proveedor
+        $solicitudes = Solicitud::with(['user', 'proveedor'])
         ->where('proveedor_id', $this->providerId)
-        ->whereBetween('fecha', [$this->startDate, $this->endDate])
-            ->get(); 
+        ->whereBetween('fecha', [
+            Carbon::parse($this->startDate)->startOfDay(),
+            Carbon::parse($this->endDate)->endOfDay()
+        ])
+        ->get();
 
         return view('exports.solicitudes', [
             'solicitudes' => $solicitudes

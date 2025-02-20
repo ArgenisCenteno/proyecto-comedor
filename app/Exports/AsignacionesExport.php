@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Asignacion;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -24,11 +25,11 @@ class AsignacionesExport implements FromView, WithHeadings, ShouldAutoSize
 
     public function view(): View
     {
-        $asignaciones = Asignacion::with('creador', 'beneficiarios')  // Include 'beneficiarios' relationship
+        $asignaciones = Asignacion::with('creador', 'beneficiarios')
         ->whereHas('beneficiarios', function($query) {
-            $query->where('proveedor_id', $this->providerId);  // Filter by proveedor_id in BeneficiarioAsignacion
+            $query->where('proveedor_id', $this->providerId);
         })
-        ->whereBetween('fecha', [$this->startDate, $this->endDate])
+        ->whereBetween('fecha', [Carbon::parse($this->startDate)->startOfDay(), Carbon::parse($this->endDate)->endOfDay()])
         ->get();
 
         return view('exports.asignaciones', [

@@ -207,7 +207,7 @@
             const nombre = row.children('td').eq(0).text();
             const descripcion = row.children('td').eq(1).text();
             const stock = row.children('td').eq(2).text();
-
+            console.log(stock)
             // Verificar si el producto ya está en la tabla principal
             let existe = false;
             $('#tablaProductos tbody tr').each(function () {
@@ -216,6 +216,11 @@
                     return false; // Salir del each
                 }
             });
+
+            if(stock <= 0){
+                alert('Stock insuficiente.');
+                return;
+            }
 
             // Si el producto no existe, agregarlo
             if (!existe) {

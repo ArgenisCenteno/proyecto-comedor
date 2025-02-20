@@ -25,29 +25,22 @@ class AsignacionController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $solicitudes = Asignacion::with( 'creador')->get();
-    
+            $solicitudes = Asignacion::with('creador')->get();
+
             return DataTables::of($solicitudes)
-                ->addColumn('actions', function ($row) {
-                    return '<a href="' . route('asignaciones.edit', [$row->id]) . '"  ><span class="material-icons">edit</span></a>
-                    <a href="' . route('asignacion.pdf', [$row->id]) . '"  target="_blank"><span class="material-icons">print</span></a>
-                        <form action="' . route('asignaciones.destroy', [$row->id]) . '" method="POST" style="display:inline;">
-                        ' . csrf_field() . method_field('DELETE') . '
-                        <button type="submit" class="border-0 bg-transparent p-0"><span class="material-icons text-danger">delete</span></button>
-                        </form>';
-                })
+            ->addColumn('actions', 'asignaciones.actions')
                 ->editColumn('fecha', function ($row) {
                     return $row->created_at->format('Y-m-d');
                 })
                 ->editColumn('tipo', function ($row) {
                     return $row->tipo;
                 })
-               
+
                 ->editColumn('creador', function ($row) {
                     return $row->creador->name;
                 })
-                
-              
+
+
                 ->editColumn('status', function ($row) {
                     // Verifica el estado y devuelve un badge con el color adecuado
                     switch ($row->status) {
@@ -66,7 +59,7 @@ class AsignacionController extends Controller
             return view('asignaciones.index', compact('providers'));
         }
     }
-    
+
 
     /**
      * Show the form for creating a new resource.
@@ -83,9 +76,9 @@ class AsignacionController extends Controller
      */
     public function store(Request $request)
     {
-      //  dd("test");
-    
-         
+        //  dd("test");
+
+
         // Crear la asignacion
         $now = Carbon::now();
         $solicitud = new Asignacion();
@@ -97,7 +90,7 @@ class AsignacionController extends Controller
         $solicitud->save();
 
 
-       
+
         $productos = is_string($request->productos) ? json_decode($request->productos, true) : $request->productos;
 
         // Debug the structure of productos
@@ -127,7 +120,7 @@ class AsignacionController extends Controller
                 // Guarda la instancia
                 $productoOrdenado->save();
 
-                if($productoOrdenado){
+                if ($productoOrdenado) {
                     $producto->cantidad -= $cantidad;
                 }
             } else {
@@ -136,14 +129,18 @@ class AsignacionController extends Controller
             }
         }
 
+        
         $proveedores = is_string($request->proveedores) ? json_decode($request->proveedores, true) : $request->proveedores;
+      
         foreach ($proveedores as $productoData) {
             $a = json_decode($productoData, true);
             // Ensure productoData is treated as an array
+          
             if (is_array($a)) {
                 $nombre = $a['nombre'] ?? null;
                 $rif = $a['rif'] ?? null;
 
+              
                 // Debug to verify contents
                 // dd($nombre, $cantidad); // Check what we're getting
 
@@ -155,10 +152,10 @@ class AsignacionController extends Controller
 
                 // Guarda la instancia
                 $b->save();
-
+                
             }
         }
-       
+
         Alert::success('Exito!', 'Registro hecho correctamente')->showConfirmButton('Aceptar', 'rgba(79, 59, 228, 1)');
         return redirect()->route('asignaciones.index');
     }
@@ -168,22 +165,22 @@ class AsignacionController extends Controller
      */
     public function show(string $id)
     {
-        
+
     }
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
-    { 
+    {
         $asignacion = Asignacion::find($id);
 
         //  dd($solicitud->id);
-           $productos = ProductoAsignado::where('asignacion_id', $asignacion->id)->get();
-           $proveedores = BeneficiarioAsignacion::where('asignacion_id', $asignacion->id)->get();
-           $personal = Personal::all();
-           $requerimientos = Requerimiento::where('tipo', 'ASIGNACION')->where('status', 'SIN PROCESAR')->orWhere('id', $asignacion->requerimiento_id)->get();
-           return view('asignaciones.edit')->with('proveedores', $proveedores)->with('personals', $personal)->with('requerimientos', $requerimientos)->with('asignacion', $asignacion)->with('productos', $productos);
+        $productos = ProductoAsignado::where('asignacion_id', $asignacion->id)->get();
+        $proveedores = BeneficiarioAsignacion::where('asignacion_id', $asignacion->id)->get();
+        $personal = Personal::all();
+        $requerimientos = Requerimiento::where('tipo', 'ASIGNACION')->where('status', 'SIN PROCESAR')->orWhere('id', $asignacion->requerimiento_id)->get();
+        return view('asignaciones.edit')->with('proveedores', $proveedores)->with('personals', $personal)->with('requerimientos', $requerimientos)->with('asignacion', $asignacion)->with('productos', $productos);
     }
 
     /**
@@ -193,12 +190,12 @@ class AsignacionController extends Controller
     {
         // Buscar la solicitud por ID
         $solicitud = Asignacion::findOrFail($id);
-    
+
         // Actualizar los campos principales de la solicitud
         $solicitud->descripcion = $request->input('descripcion');
         $solicitud->tipo = $request->tipo;
         $solicitud->save();
-    
+
         // Obtener los productos enviados en la solicitud (productos seleccionados en el formulario)
         $productosEnFormulario = is_string($request->productos) ? json_decode($request->productos, true) : $request->productos;
         $proveedoresEnFormulario = is_string($request->proveedores) ? json_decode($request->proveedores, true) : $request->proveedores;
@@ -207,28 +204,28 @@ class AsignacionController extends Controller
         $proveedoresExistentes = BeneficiarioAsignacion::where('asignacion_id', $solicitud->id)->get();
         // Guardar IDs de productos seleccionados en el formulario
         $productosIdsEnFormulario = [];
-      
-    
+
+
         // Actualizar o agregar productos
         foreach ($productosEnFormulario as $productoData) {
             $productoArray = json_decode($productoData, true);
-    
+
             if (is_array($productoArray)) {
                 $nombre = $productoArray['nombre'] ?? null;
                 $cantidad = $productoArray['cantidad'] ?? null;
-    
+
                 // Buscar el producto en la base de datos por nombre
                 $producto = Producto::where('nombre', $nombre)->first();
-    
+
                 if ($producto) {
                     // Guardar el producto_id en el array para la comparación posterior
                     $productosIdsEnFormulario[] = $producto->id;
-    
+
                     // Verificar si el producto ya está en la solicitud
                     $productoExistente = ProductoAsignado::where('asignacion_id', $solicitud->id)
                         ->where('producto_id', $producto->id)
                         ->first();
-    
+
                     if ($productoExistente) {
                         // Si el producto ya existe en la solicitud, actualizar la cantidad
                         $productoExistente->cantidad = $cantidad;
@@ -252,27 +249,27 @@ class AsignacionController extends Controller
             }
         }
         $proveedoresIdsEnFormulario = [];
-      
+
         foreach ($proveedoresEnFormulario as $productoData) {
             $productoArray = json_decode($productoData, true);
 
             if (is_array($productoArray)) {
                 $nombre = $productoArray['nombre'] ?? null;
                 $rif = $productoArray['rif'] ?? null;
-    
+
                 // Buscar el producto en la base de datos por nombre
                 $proveedor = Proveedor::where('rif', $rif)->first();
-                
-    
+
+
                 if ($proveedor) {
                     // Guardar el producto_id en el array para la comparación posterior
                     $proveedoresIdsEnFormulario[] = $proveedor->id;
-    
+
                     // Verificar si el producto ya está en la solicitud
                     $proveedorExistente = BeneficiarioAsignacion::where('proveedor_id', $proveedor->id)
-                      
+
                         ->first();
-    
+
                     if (!$proveedorExistente) {
                         // Si el producto no existe en la solicitud, agregarlo
                         $nuevoBeneficiario = new BeneficiarioAsignacion();
@@ -289,7 +286,7 @@ class AsignacionController extends Controller
                 Alert::error('¡Error!', 'Datos inválidos')->showConfirmButton('Aceptar', 'rgba(79, 59, 228, 1)');
             }
         }
-    
+
         // Eliminar productos que ya no están en la lista
         foreach ($productosExistentes as $productoExistente) {
             if (!in_array($productoExistente->producto_id, $productosIdsEnFormulario)) {
@@ -298,12 +295,12 @@ class AsignacionController extends Controller
             }
         }
 
-    /*    foreach ($proveedoresExistentes as $proveedorExistente) {
-            if (!in_array($proveedorExistente->proveedor_id, $productosIdsEnFormulario)) {
-                // Eliminar el producto si ya no está en la nueva lista de productos seleccionados
-                $proveedorExistente->delete();
-            }
-        } */
+        /*    foreach ($proveedoresExistentes as $proveedorExistente) {
+                if (!in_array($proveedorExistente->proveedor_id, $productosIdsEnFormulario)) {
+                    // Eliminar el producto si ya no está en la nueva lista de productos seleccionados
+                    $proveedorExistente->delete();
+                }
+            } */
 
         $productosOrdenados = ProductoAsignado::where('asignacion_id', $solicitud->id)->get();
         if ($solicitud->status == 'Pendiente' && $request->status == 'Aprobado') {
@@ -312,7 +309,13 @@ class AsignacionController extends Controller
             foreach ($productosOrdenados as $productoAsignado) {
                 $producto = Producto::find($productoAsignado->producto_id);
                 $producto->cantidad -= $productoAsignado->cantidad;
+               
                 $producto->save();
+
+                if($producto->cantidad == 0){
+                    $producto->disponible = '0';
+                    $producto->save();
+                }
             }
         } else if ($solicitud->status == 'Pendiente' && $request->status == 'Cancelado') {
             $solicitud->status = $request->status;
@@ -333,28 +336,28 @@ class AsignacionController extends Controller
             Alert::error('Error!', 'Una Asignación rechazada no puede ser aprobada')->showConfirmButton('Aceptar', 'rgba(79, 59, 228, 1)');
 
             return redirect()->route('asignaciones.index')->with('success', 'Erro al actualizar solicitud');
-        }else if ($solicitud->status == 'cancelado' && $request->status == 'pendiente') {
+        } else if ($solicitud->status == 'cancelado' && $request->status == 'pendiente') {
             Alert::error('Error!', 'Una Asignación rechazada no puede pasar a pendiente')->showConfirmButton('Aceptar', 'rgba(79, 59, 228, 1)');
 
             return redirect()->route('asignaciones.index')->with('success', 'Erro al actualizar solicitud');
         }
-    
+
         // Redireccionar después de actualizar la solicitud
         Alert::success('¡Éxito!', 'Registro actualizado correctamente')->showConfirmButton('Aceptar', 'rgba(79, 59, 228, 1)');
-    
+
         return redirect()->route('asignaciones.index')->with('success', 'Solicitud actualizada correctamente');
     }
-    
-    
+
+
     public function export(Request $request)
     {
-        if($request->end_date < $request->start_date){
+        if ($request->end_date < $request->start_date) {
             Alert::error('Consulta incongruente,', 'Ingrese un rango de fecha correcto')->showConfirmButton('Aceptar', 'rgba(79, 59, 228, 1)');
-    
+
             return redirect()->route('asignaciones.index')->with('success', 'Solicitud actualizada correctamente');
-        } 
+        }
         // Validate the date range
-       
+
         $providerId = $request->input('provider_id');
         return Excel::download(new AsignacionesExport($request->start_date, $request->end_date, $providerId), 'asignaciones.xlsx');
     }
@@ -363,27 +366,42 @@ class AsignacionController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $asignacion = Asignacion::find($id);
+        if (!$asignacion) {
+            Alert::error('Error', 'No existe esta asignación')->showConfirmButton('Aceptar', 'rgba(79, 59, 228, 1)');
+
+            return redirect()->route('asignaciones.index')->with('success', 'Erro al actualizar solicitud');
+
+        }
+
+        $asignacion->delete();
+
+        Alert::success('¡Exitos!', 'Registro eliminado exitosamente')->showConfirmButton('Aceptar', 'rgba(79, 59, 228, 1)');
+
+        return redirect()->route('asignaciones.index')->with('success', 'Erro al actualizar solicitud');
+  
     }
 
-    public function pdf(string $id) {
+    public function pdf(string $id)
+    {
         $asignacion = Asignacion::where('id', $id)->first();
 
-        
+
 
         if (!$asignacion) {
             Alert::error('¡Error!', 'Asignación no encontrada.')->showConfirmButton('Aceptar', 'rgba(79, 59, 228, 1)');
             return redirect(route('asignaciones.index'));
         }
 
+        
         // Ocultar 'password' y 'remember_token' y convertir a array
-     
+        $proveedores = BeneficiarioAsignacion::where('asignacion_id', $asignacion->id)->get();
+      
         $qrCode = QrCode::size(120)->generate('http://127.0.0.1:8000/pdfAsignacion/' . $id);
 
-       // dd($vendedorArray);
+        // dd($vendedorArray);
         $pdf = \App::make('dompdf.wrapper');
-        $pdf->loadView('asignaciones.pdf', compact('qrCode','asignacion'));
+        $pdf->loadView('asignaciones.pdf', compact('qrCode', 'asignacion', 'proveedores'));
         return $pdf->stream('asignacion.pdf');
     }
 }
-  

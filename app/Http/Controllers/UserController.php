@@ -133,9 +133,7 @@ class UserController extends Controller
 
     // 3. Actualizar los campos
     $usuario->name = $validatedData['name'];
-    $usuario->email = $validatedData['email'];
-    $usuario->telefono = $validatedData['telefono'];
-    $usuario->dirrecion = $validatedData['direccion'];
+    $usuario->email = $validatedData['email'];  
     $usuario->cedula = $validatedData['cedula'];
     $usuario->status = $validatedData['status'];
 

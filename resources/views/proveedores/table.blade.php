@@ -25,16 +25,23 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-
         $('#productos-table').DataTable({
             processing: true,
             serverSide: true,
             responsive: true,
-            ajax: "{{ route('proveedores.index') }}", 
+            ajax: "{{ route('proveedores.index') }}",
             dataType: 'json',
             type: "POST",
             columns: [
-                { data: 'id', name: 'id' },
+                { 
+                    data: null, 
+                    name: 'index', 
+                    orderable: false, 
+                    searchable: false,
+                    render: function (data, type, row, meta) {
+                        return meta.settings._iRecordsDisplay - meta.row; // Índice descendente
+                    }
+                },
                 { data: 'razon_social', name: 'razon_social' },
                 { data: 'rif', name: 'rif' },
                 { data: 'telefono', name: 'telefono' },
@@ -42,10 +49,9 @@
                 { data: 'estado', name: 'estado' },
                 { data: 'municipio', name: 'municipio' },
                 { data: 'parroquia', name: 'parroquia' },
-             
                 { data: 'actions', name: 'actions', searchable: true, orderable: true }
             ],
-            order: [[0, 'desc']],
+            order: [[0, 'desc']], // Ordena por índice de mayor a menor
             "language": {
                 "lengthMenu": "Mostrar _MENU_ Registros por Página",
                 "zeroRecords": "Sin resultados",
